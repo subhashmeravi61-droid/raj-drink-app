@@ -2,58 +2,74 @@
 <html lang="hi">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Raj Cold Drink Center, Bodla</title>
     <style>
-        body { font-family: sans-serif; background: #1a1a1a; color: white; padding: 10px; }
-        .card { max-width: 400px; margin: auto; }
-        .header { text-align: center; color: #4caf50; }
-        .item-card { background: #2a2a2a; padding: 12px; margin-bottom: 10px; border-radius: 10px; }
-        .btn-price { border: none; padding: 6px 10px; margin: 2px; border-radius: 4px; font-size: 11px; font-weight: bold; cursor: pointer; color: white; border: 2px solid transparent; }
-        .btn-qty { border: none; padding: 8px 15px; cursor: pointer; border-radius: 5px; background: #555; color: white; font-weight: bold; }
-        .selected { border-color: #fff; transform: scale(1.05); }
+        body { font-family: sans-serif; background: #121212; color: #fff; padding: 10px; }
+        .card { max-width: 400px; margin: auto; background: #1e1e1e; padding: 15px; border-radius: 15px; }
+        .header { text-align: center; color: #4caf50; margin-bottom: 20px; }
+        .input-field { width: 100%; padding: 10px; margin: 5px 0; background: #2c2c2c; border: 1px solid #333; color: white; border-radius: 8px; box-sizing: border-box; }
+        .item-card { border: 1px solid #333; padding: 10px; margin-bottom: 10px; border-radius: 12px; display: flex; align-items: center; gap: 10px; }
+        .item-photo { width: 50px; height: 50px; border-radius: 50%; object-fit: cover; }
+        .btn-opt { border: none; padding: 6px; border-radius: 5px; font-size: 10px; font-weight: bold; cursor: pointer; color: white; margin: 2px; border: 2px solid transparent; }
+        .qty-controls { display: flex; align-items: center; gap: 8px; margin-top: 8px; }
+        .btn-qty { border: none; padding: 6px 15px; cursor: pointer; border-radius: 5px; font-weight: bold; background: #555; color: white; }
+        .btn-order { width: 100%; padding: 15px; background: #25d366; border: none; color: white; font-weight: bold; border-radius: 5px; cursor: pointer; margin-top: 10px; }
+        .selected { border-color: white !important; transform: scale(1.05); }
     </style>
 </head>
 <body>
     <div class="card">
         <h2 class="header">🥤 Raj Cold Drink Center, Bodla</h2>
+        <input type="text" class="input-field" placeholder="Dukaan ka Naam">
+        <input type="text" class="input-field" placeholder="Tumhara Naam">
+        <input type="text" class="input-field" placeholder="Pata (Address)">
+        <input type="number" class="input-field" placeholder="Mobile Number">
+
         <div id="itemsContainer"></div>
-        <button style="width:100%; padding:15px; background:#25d366; border:none; color:white; font-weight:bold; border-radius:5px;" onclick="alert('Order Placed!')">ORDER NOW</button>
+        <button class="btn-order" onclick="alert('Order Sent!')">ORDER NOW</button>
     </div>
 
     <script>
         const drinks = [
-            {name: "Sprite(250ml)", p: [["#4caf50", "Peti W ₹490"], ["#2196f3", "Peti W/O ₹460"], ["#ffc107", "Piece ₹20"]]},
-            {name: "Maaza", p: [["#4caf50", "Peti W ₹520"], ["#2196f3", "Peti W/O ₹720"], ["#ffc107", "Piece ₹25"]]},
-            {name: "Sting", p: [["#4caf50", "Peti W ₹450"], ["#2196f3", "Peti W/O ₹450"], ["#ffc107", "Piece ₹20"]]},
-            {name: "Kinley", p: [["#4caf50", "Peti W ₹180"], ["#2196f3", "Peti W/O ₹180"], ["#ffc107", "Piece ₹20"]]},
-            {name: "Bisleri", p: [["#4caf50", "Peti W ₹380"], ["#2196f3", "Peti W/O ₹380"], ["#ffc107", "Piece ₹20"]]},
-            {name: "Appy Fizz", p: [["#4caf50", "Peti W ₹500"], ["#2196f3", "Peti W/O ₹500"], ["#ffc107", "Piece ₹20"]]},
-            {name: "Coca Cola", p: [["#4caf50", "Peti W ₹600"], ["#2196f3", "Peti W/O ₹600"], ["#ffc107", "Piece ₹20"]]},
-            {name: "Frooti (₹5)", p: [["#4caf50", "Peti W ₹100"], ["#2196f3", "Peti W/O ₹100"], ["#ffc107", "Piece ₹5"]]}
+            {name: "Sprite(250ml)", color: "#4caf50", pW: 490, pwO: 460, pP: 20},
+            {name: "Maaza", color: "#ffc107", pW: 520, pwO: 720, pP: 25},
+            {name: "Sting", color: "#f44336", pW: 450, pwO: 450, pP: 20},
+            {name: "Kinley", color: "#2196f3", pW: 180, pwO: 180, pP: 20},
+            {name: "Bisleri", color: "#00bcd4", pW: 380, pwO: 380, pP: 20},
+            {name: "Appy Fizz", color: "#795548", pW: 500, pwO: 500, pP: 20},
+            {name: "Coca Cola", color: "#d32f2f", pW: 600, pwO: 600, pP: 20},
+            {name: "Frooti (₹5)", color: "#ff9800", pW: 100, pwO: 100, pP: 5}
         ];
 
         const container = document.getElementById('itemsContainer');
         drinks.forEach((d) => {
-            let btns = d.p.map(p => `<button class="btn-price" style="background:${p[0]}" onclick="select(this)">${p[1]}</button>`).join('');
             container.innerHTML += `
             <div class="item-card">
-                <strong>${d.name}</strong><br>
-                <div style="margin: 8px 0;">${btns}</div>
+                <div class="item-photo" style="background:${d.color}"></div>
                 <div>
-                    <button class="btn-qty" onclick="change(this, -1)">-</button>
-                    <span class="count" style="margin:0 15px;">0</span>
-                    <button class="btn-qty" onclick="change(this, 1)">+</button>
+                    <strong>${d.name}</strong>
+                    <div>
+                        <button class="btn-opt" style="background:#2e7d32" onclick="selectBtn(this)">Peti With ₹${d.pW}</button>
+                        <button class="btn-opt" style="background:#1976d2" onclick="selectBtn(this)">Peti W/O ₹${d.pwO}</button>
+                        <button class="btn-opt" style="background:#fbc02d; color:black" onclick="selectBtn(this)">Piece ₹${d.pP}</button>
+                    </div>
+                    <div class="qty-controls">
+                        <button class="btn-qty" onclick="updateQty(this, -1)">-</button>
+                        <span class="qty-val" style="margin: 0 10px;">0</span>
+                        <button class="btn-qty" onclick="updateQty(this, 1)">+</button>
+                    </div>
                 </div>
             </div>`;
         });
 
-        function select(btn) {
-            btn.parentElement.querySelectorAll('.btn-price').forEach(b => b.classList.remove('selected'));
+        function selectBtn(btn) {
+            btn.parentElement.querySelectorAll('.btn-opt').forEach(b => b.classList.remove('selected'));
             btn.classList.add('selected');
         }
 
-        function change(btn, val) {
-            let span = btn.parentElement.querySelector('.count');
+        function updateQty(btn, val) {
+            let span = btn.parentElement.querySelector('.qty-val');
             let count = parseInt(span.innerText) + val;
             if (count >= 0) span.innerText = count;
         }
