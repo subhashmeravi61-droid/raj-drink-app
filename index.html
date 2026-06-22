@@ -2,56 +2,57 @@
 <html lang="hi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Raj Cold Drink Center, Bodla</title>
     <style>
         body { font-family: sans-serif; background: #1a1a1a; color: white; padding: 10px; }
         .card { max-width: 400px; margin: auto; }
         .header { text-align: center; color: #4caf50; }
-        .input-field { width: 100%; padding: 10px; margin: 5px 0; background: #333; border: none; color: white; border-radius: 5px; }
-        .item-card { background: #2a2a2a; padding: 10px; margin-bottom: 10px; border-radius: 10px; display: flex; align-items: center; gap: 10px; }
-        .btn-qty { border: none; padding: 5px 12px; cursor: pointer; border-radius: 5px; background: #555; color: white; }
-        .price-btn { border: none; padding: 5px; font-size: 10px; border-radius: 3px; cursor: pointer; margin: 2px; }
+        .item-card { background: #2a2a2a; padding: 12px; margin-bottom: 10px; border-radius: 10px; }
+        .btn-price { border: none; padding: 6px 10px; margin: 2px; border-radius: 4px; font-size: 11px; font-weight: bold; cursor: pointer; color: white; border: 2px solid transparent; }
+        .btn-qty { border: none; padding: 8px 15px; cursor: pointer; border-radius: 5px; background: #555; color: white; font-weight: bold; }
+        .selected { border-color: #fff; transform: scale(1.05); }
     </style>
 </head>
 <body>
     <div class="card">
         <h2 class="header">🥤 Raj Cold Drink Center, Bodla</h2>
-        <input type="text" class="input-field" placeholder="Dukaan ka Naam">
-        <input type="text" class="input-field" placeholder="Tumhara Naam">
-        <input type="text" class="input-field" placeholder="Pata (Address)">
-        <input type="number" class="input-field" placeholder="Mobile Number">
-
         <div id="itemsContainer"></div>
-        <button style="width:100%; padding:15px; background:#25d366; border:none; color:white; font-weight:bold; border-radius:5px;">ORDER NOW</button>
+        <button style="width:100%; padding:15px; background:#25d366; border:none; color:white; font-weight:bold; border-radius:5px;" onclick="alert('Order Placed!')">ORDER NOW</button>
     </div>
 
     <script>
         const drinks = [
-            {name: "Sprite(250ml)", color: "#4caf50", prices: ["Peti W ₹490", "Peti W/O ₹460", "Piece ₹20"]},
-            {name: "Maaza", color: "#ffc107", prices: ["Peti W ₹520", "Peti W/O ₹720", "Piece ₹25"]},
-            {name: "Sting", color: "#f44336", prices: ["Peti W ₹450", "Peti W/O ₹450", "Piece ₹20"]},
-            {name: "Kinley", color: "#2196f3", prices: ["Peti W ₹180", "Peti W/O ₹180", "Piece ₹20"]},
-            {name: "Bisleri", color: "#00bcd4", prices: ["Peti W ₹380", "Peti W/O ₹380", "Piece ₹20"]}
+            {name: "Sprite(250ml)", p: [["#4caf50", "Peti W ₹490"], ["#2196f3", "Peti W/O ₹460"], ["#ffc107", "Piece ₹20"]]},
+            {name: "Maaza", p: [["#4caf50", "Peti W ₹520"], ["#2196f3", "Peti W/O ₹720"], ["#ffc107", "Piece ₹25"]]},
+            {name: "Sting", p: [["#4caf50", "Peti W ₹450"], ["#2196f3", "Peti W/O ₹450"], ["#ffc107", "Piece ₹20"]]},
+            {name: "Kinley", p: [["#4caf50", "Peti W ₹180"], ["#2196f3", "Peti W/O ₹180"], ["#ffc107", "Piece ₹20"]]},
+            {name: "Bisleri", p: [["#4caf50", "Peti W ₹380"], ["#2196f3", "Peti W/O ₹380"], ["#ffc107", "Piece ₹20"]]},
+            {name: "Appy Fizz", p: [["#4caf50", "Peti W ₹500"], ["#2196f3", "Peti W/O ₹500"], ["#ffc107", "Piece ₹20"]]},
+            {name: "Coca Cola", p: [["#4caf50", "Peti W ₹600"], ["#2196f3", "Peti W/O ₹600"], ["#ffc107", "Piece ₹20"]]},
+            {name: "Frooti (₹5)", p: [["#4caf50", "Peti W ₹100"], ["#2196f3", "Peti W/O ₹100"], ["#ffc107", "Piece ₹5"]]}
         ];
 
         const container = document.getElementById('itemsContainer');
         drinks.forEach((d) => {
-            let priceButtons = d.prices.map(p => `<button class="price-btn">${p}</button>`).join('');
+            let btns = d.p.map(p => `<button class="btn-price" style="background:${p[0]}" onclick="select(this)">${p[1]}</button>`).join('');
             container.innerHTML += `
             <div class="item-card">
-                <div style="width:40px; height:40px; border-radius:50%; background:${d.color}"></div>
+                <strong>${d.name}</strong><br>
+                <div style="margin: 8px 0;">${btns}</div>
                 <div>
-                    <strong>${d.name}</strong><br>
-                    <div>${priceButtons}</div>
-                    <button class="btn-qty" onclick="updateCount(this, -1)">-</button>
-                    <span class="count" style="margin:0 10px;">0</span>
-                    <button class="btn-qty" onclick="updateCount(this, 1)">+</button>
+                    <button class="btn-qty" onclick="change(this, -1)">-</button>
+                    <span class="count" style="margin:0 15px;">0</span>
+                    <button class="btn-qty" onclick="change(this, 1)">+</button>
                 </div>
             </div>`;
         });
 
-        function updateCount(btn, val) {
+        function select(btn) {
+            btn.parentElement.querySelectorAll('.btn-price').forEach(b => b.classList.remove('selected'));
+            btn.classList.add('selected');
+        }
+
+        function change(btn, val) {
             let span = btn.parentElement.querySelector('.count');
             let count = parseInt(span.innerText) + val;
             if (count >= 0) span.innerText = count;
