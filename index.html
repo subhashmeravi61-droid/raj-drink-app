@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Raj Cold Drink Center, Bodla</title>
+    <style>
+        body { font-family: sans-serif; background: #121212; color: #fff; padding: 10px; }
+        .card { background: #1e1e1e; padding: 15px; border-radius: 15px; max-width: 400px; margin: auto; }
+        .header { text-align: center; color: #4caf50; margin-bottom: 20px; }
+        .input-field { width: 100%; padding: 10px; margin: 5px 0; border-radius: 8px; border: 1px solid #333; background: #2c2c2c; color: white; box-sizing: border-box; }
+        .item-card { border: 1px solid #333; padding: 10px; margin-bottom: 10px; border-radius: 12px; display: flex; align-items: center; gap: 10px; }
+        .item-photo { width: 50px; height: 50px; border-radius: 50%; object-fit: cover; background: #555; }
+        .btn-opt { border: none; padding: 6px; border-radius: 5px; font-size: 10px; cursor: pointer; color: white; font-weight: bold; margin: 2px; }
+        .qty-controls { display: flex; align-items: center; gap: 8px; margin-top: 8px; }
+        .btn-qty { border: none; padding: 6px 15px; border-radius: 5px; cursor: pointer; color: white; font-weight: bold; }
+        .btn-order { background: #25d366; color: white; padding: 12px; width: 100%; border-radius: 8px; border: none; font-weight: bold; margin-top: 15px; }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <h2 class="header">🥤 Raj Cold Drink Center, Bodla</h2>
+    <input type="text" class="input-field" placeholder="Dukaan ka Naam">
+    <input type="text" class="input-field" placeholder="Tumhara Naam">
+    <input type="text" class="input-field" placeholder="Pata (Address)">
+    <input type="number" class="input-field" placeholder="Mobile Number">
+
+    <div id="itemsContainer"></div>
+
+    <h3 style="text-align:center;">TOTAL: ₹<span id="displayTotal">0</span></h3>
+    <button class="btn-order" onclick="sendOrder()">WhatsApp par Order bhejein 📲</button>
+</div>
+
+<script>
+    const drinks = [
+        {name: "Sprite(250ml)", color: "#4caf50", pW: 490, pWO: 460, pP: 20},
+        {name: "Maaza", color: "#ffc107", pW: 520, pWO: 720, pP: 25},
+        {name: "Sting", color: "#f44336", pW: 450, pWO: 450, pP: 20},
+        {name: "Kinley", color: "#2196f3", pW: 180, pWO: 180, pP: 20},
+        {name: "Bisleri", color: "#00bcd4", pW: 380, pWO: 380, pP: 20},
+        {name: "Appy Fizz", color: "#795548", pW: 600, pWO: 580, pP: 20},
+        {name: "Coca Cola", color: "#d32f2f", pW: 520, pWO: 520, pP: 22},
+        {name: "Frooti (₹5)", color: "#ff9800", pW: 100, pWO: 100, pP: 5}
+    ];
+
+    const container = document.getElementById('itemsContainer');
+    drinks.forEach((d, i) => {
+        container.innerHTML += `
+            <div class="item-card">
+                <div class="item-photo" style="background:${d.color}"></div>
+                <div>
+                    <strong>${d.name}</strong>
+                    <div>
+                        <button class="btn-opt" style="background:#2e7d32" onclick="setTheme(${i}, '#2e7d32')">Peti With ₹${d.pW}</button>
+                        <button class="btn-opt" style="background:#1976d2" onclick="setTheme(${i}, '#1976d2')">Peti W/O ₹${d.pWO}</button>
+                        <button class="btn-opt" style="background:#fbc02d; color:black" onclick="setTheme(${i}, '#fbc02d')">Piece ₹${d.pP}</button>
+                    </div>
+                    <div class="qty-controls" id="ctrl${i}">
+                        <button class="btn-qty" style="background:#555" onclick="changeQty(${i}, -1)">-</button>
+                        <span style="margin: 0 10px;">0</span>
+                        <button class="btn-qty" style="background:#555" onclick="changeQty(${i}, 1)">+</button>
+                    </div>
+                </div>
+            </div>
+        `;
+    });
+
+    function setTheme(i, color) {
+        const ctrl = document.getElementById('ctrl' + i);
+        ctrl.querySelectorAll('button').forEach(btn => btn.style.backgroundColor = color);
+    }
+
+    function changeQty(i, val) { /* Yahan logic update ho jayega */ }
+    function sendOrder() { alert("Order details ready!"); }
+</script>
+</body>
+</html>
