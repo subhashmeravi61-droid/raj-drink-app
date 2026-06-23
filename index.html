@@ -94,12 +94,13 @@
         const mobile = document.getElementById('mobile').value;
         
         if (dukaan === "" || naam === "" || pata === "" || mobile === "") {
-            alert("Bhai, sabhi details bhar do!");
+            alert("Bhai, sabhi details (Dukaan, Naam, Address, Mobile) bhar do!");
             return;
         }
 
         let msg = `Order from: ${dukaan}\nName: ${naam}\nAddress: ${pata}\nMob: ${mobile}\n\nITEMS:\n`;
         let hasItems = false;
+        
         drinks.forEach(d => { 
             if(d.qty > 0) { 
                 msg += `${d.name} (${d.type} @ ₹${d.price}) x ${d.qty}\n`; 
