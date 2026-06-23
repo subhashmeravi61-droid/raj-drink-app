@@ -103,7 +103,8 @@
         
         drinks.forEach(d => { 
             if(d.qty > 0) { 
-                msg += `${d.name} (${d.type} @ ₹${d.price}) x ${d.qty}\n`; 
+                // Yahan d.type ensure kar raha hai ki Peti/Piece likha aaye
+                msg += `${d.name} (${d.type || 'Piece'} @ ₹${d.price}) x ${d.qty}\n`; 
                 hasItems = true;
             } 
         });
