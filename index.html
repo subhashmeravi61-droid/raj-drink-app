@@ -34,14 +34,14 @@
 
 <script>
     const drinks = [
-        {name: "Sprite(250ml)", color: "#4caf50", pW: 490, pWO: 460, pP: 20, qty: 0, price: 0},
-        {name: "Maaza", color: "#ffc107", pW: 520, pWO: 720, pP: 25, qty: 0, price: 0},
-        {name: "Sting", color: "#f44336", pW: 450, pWO: 450, pP: 20, qty: 0, price: 0},
-        {name: "Kinley", color: "#2196f3", pW: 180, pWO: 180, pP: 20, qty: 0, price: 0},
-        {name: "Bisleri", color: "#00bcd4", pW: 380, pWO: 380, pP: 20, qty: 0, price: 0},
-        {name: "Appy Fizz", color: "#795548", pW: 600, pWO: 580, pP: 20, qty: 0, price: 0},
-        {name: "Coca Cola", color: "#d32f2f", pW: 520, pWO: 520, pP: 22, qty: 0, price: 0},
-        {name: "Frooti (₹5)", color: "#ff9800", pW: 100, pWO: 100, pP: 5, qty: 0, price: 0}
+        {name: "Sprite(250ml)", color: "#4caf50", pW: 490, pWO: 460, pP: 20, qty: 0, price: 0, type: ""},
+        {name: "Maaza", color: "#ffc107", pW: 520, pWO: 720, pP: 25, qty: 0, price: 0, type: ""},
+        {name: "Sting", color: "#f44336", pW: 450, pWO: 450, pP: 20, qty: 0, price: 0, type: ""},
+        {name: "Kinley", color: "#2196f3", pW: 180, pWO: 180, pP: 20, qty: 0, price: 0, type: ""},
+        {name: "Bisleri", color: "#00bcd4", pW: 380, pWO: 380, pP: 20, qty: 0, price: 0, type: ""},
+        {name: "Appy Fizz", color: "#795548", pW: 600, pWO: 580, pP: 20, qty: 0, price: 0, type: ""},
+        {name: "Coca Cola", color: "#d32f2f", pW: 520, pWO: 520, pP: 22, qty: 0, price: 0, type: ""},
+        {name: "Frooti (₹5)", color: "#ff9800", pW: 100, pWO: 100, pP: 5, qty: 0, price: 0, type: ""}
     ];
 
     const container = document.getElementById('itemsContainer');
@@ -52,9 +52,9 @@
                 <div>
                     <strong>${d.name}</strong>
                     <div>
-                        <button class="btn-opt" style="background:#2e7d32" onclick="setPrice(${i}, ${d.pW}, '#2e7d32', this)">Peti W ₹${d.pW}</button>
-                        <button class="btn-opt" style="background:#1976d2" onclick="setPrice(${i}, ${d.pWO}, '#1976d2', this)">Peti W/O ₹${d.pWO}</button>
-                        <button class="btn-opt" style="background:#fbc02d; color:black" onclick="setPrice(${i}, ${d.pP}, '#fbc02d', this)">Piece ₹${d.pP}</button>
+                        <button class="btn-opt" style="background:#2e7d32" onclick="setPrice(${i}, ${d.pW}, 'Peti With Skim', '#2e7d32', this)">Peti With Skim ₹${d.pW}</button>
+                        <button class="btn-opt" style="background:#1976d2" onclick="setPrice(${i}, ${d.pWO}, 'Peti Without Skim', '#1976d2', this)">Peti Without Skim ₹${d.pWO}</button>
+                        <button class="btn-opt" style="background:#fbc02d; color:black" onclick="setPrice(${i}, ${d.pP}, 'Piece', '#fbc02d', this)">Piece ₹${d.pP}</button>
                     </div>
                     <div class="qty-controls" id="ctrl${i}">
                         <button class="btn-qty" style="background:#555" onclick="changeQty(${i}, -1)">-</button>
@@ -66,8 +66,9 @@
         `;
     });
 
-    function setPrice(i, price, color, btn) {
+    function setPrice(i, price, type, color, btn) {
         drinks[i].price = price;
+        drinks[i].type = type;
         btn.parentElement.querySelectorAll('button').forEach(b => b.style.border = "none");
         btn.style.border = "2px solid white";
         const ctrl = document.getElementById('ctrl' + i);
@@ -91,32 +92,29 @@
         const naam = document.getElementById('naam').value;
         const pata = document.getElementById('pata').value;
         const mobile = document.getElementById('mobile').value;
-        const total = document.getElementById('displayTotal').innerText;
-
+        
         if (dukaan === "" || naam === "" || pata === "" || mobile === "") {
-            alert("Bhai, order bhejne ke liye Dukaan ka Naam, Tumhara Naam, Address aur Mobile Number bhar do!");
+            alert("Bhai, sabhi details bhar do!");
             return;
         }
 
-        let hasItems = false;
         let msg = `Order from: ${dukaan}\nName: ${naam}\nAddress: ${pata}\nMob: ${mobile}\n\nITEMS:\n`;
-        
+        let hasItems = false;
         drinks.forEach(d => { 
             if(d.qty > 0) { 
-                msg += `${d.name} (₹${d.price}) x ${d.qty}\n`; 
+                msg += `${d.name} (${d.type} @ ₹${d.price}) x ${d.qty}\n`; 
                 hasItems = true;
             } 
         });
 
         if (!hasItems) {
-            alert("Bhai, pehle koi item to select karo!");
+            alert("Pehle item select karo!");
             return;
         }
-
-        msg += `\nTOTAL: ₹${total}`;
+        
+        msg += `\nTOTAL: ₹${document.getElementById('displayTotal').innerText}`;
         window.open(`https://wa.me/916264917767?text=${encodeURIComponent(msg)}`, '_blank');
     }
 </script>
 </body>
 </html>
-
