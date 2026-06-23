@@ -6,75 +6,85 @@
     <title>Raj Cold Drink Center, Bodla</title>
     <style>
         body { font-family: sans-serif; background: #121212; color: #fff; padding: 10px; }
-        .card { max-width: 400px; margin: auto; background: #1e1e1e; padding: 15px; border-radius: 15px; }
+        .card { background: #1e1e1e; padding: 15px; border-radius: 15px; max-width: 400px; margin: auto; }
         .header { text-align: center; color: #4caf50; margin-bottom: 20px; }
-        .input-field { width: 100%; padding: 10px; margin: 5px 0; background: #2c2c2c; border: 1px solid #333; color: white; border-radius: 8px; box-sizing: border-box; }
+        .input-field { width: 100%; padding: 10px; margin: 5px 0; border-radius: 8px; border: 1px solid #333; background: #2c2c2c; color: white; box-sizing: border-box; }
         .item-card { border: 1px solid #333; padding: 10px; margin-bottom: 10px; border-radius: 12px; display: flex; align-items: center; gap: 10px; }
-        .item-photo { width: 50px; height: 50px; border-radius: 50%; object-fit: cover; }
-        .btn-opt { border: none; padding: 6px; border-radius: 5px; font-size: 10px; font-weight: bold; cursor: pointer; color: white; margin: 2px; border: 2px solid transparent; }
+        .item-photo { width: 50px; height: 50px; border-radius: 50%; object-fit: cover; background: #555; }
+        .btn-opt { border: none; padding: 6px; border-radius: 5px; font-size: 10px; cursor: pointer; color: white; font-weight: bold; margin: 2px; }
         .qty-controls { display: flex; align-items: center; gap: 8px; margin-top: 8px; }
-        .btn-qty { border: none; padding: 6px 15px; cursor: pointer; border-radius: 5px; font-weight: bold; background: #555; color: white; }
-        .btn-order { width: 100%; padding: 15px; background: #25d366; border: none; color: white; font-weight: bold; border-radius: 5px; cursor: pointer; margin-top: 10px; }
-        .selected { border-color: white !important; transform: scale(1.05); }
+        .btn-qty { border: none; padding: 6px 15px; border-radius: 5px; cursor: pointer; color: white; font-weight: bold; }
+        .btn-order { background: #25d366; color: white; padding: 12px; width: 100%; border-radius: 8px; border: none; font-weight: bold; margin-top: 15px; }
     </style>
 </head>
 <body>
-    <div class="card">
-        <h2 class="header">🥤 Raj Cold Drink Center, Bodla</h2>
-        <input type="text" class="input-field" placeholder="Dukaan ka Naam">
-        <input type="text" class="input-field" placeholder="Tumhara Naam">
-        <input type="text" class="input-field" placeholder="Pata (Address)">
-        <input type="number" class="input-field" placeholder="Mobile Number">
 
-        <div id="itemsContainer"></div>
-        <button class="btn-order" onclick="alert('Order Sent!')">ORDER NOW</button>
-    </div>
+<div class="card">
+    <h2 class="header">🥤 Raj Cold Drink Center, Bodla</h2>
+    <input type="text" class="input-field" placeholder="Dukaan ka Naam">
+    <input type="text" class="input-field" placeholder="Tumhara Naam">
+    <input type="text" class="input-field" placeholder="Pata (Address)">
+    <input type="number" class="input-field" placeholder="Mobile Number">
 
-    <script>
-        const drinks = [
-            {name: "Sprite(250ml)", color: "#4caf50", pW: 490, pwO: 460, pP: 20},
-            {name: "Maaza", color: "#ffc107", pW: 520, pwO: 720, pP: 25},
-            {name: "Sting", color: "#f44336", pW: 450, pwO: 450, pP: 20},
-            {name: "Kinley", color: "#2196f3", pW: 180, pwO: 180, pP: 20},
-            {name: "Bisleri", color: "#00bcd4", pW: 380, pwO: 380, pP: 20},
-            {name: "Appy Fizz", color: "#795548", pW: 500, pwO: 500, pP: 20},
-            {name: "Coca Cola", color: "#d32f2f", pW: 600, pwO: 600, pP: 20},
-            {name: "Frooti (₹5)", color: "#ff9800", pW: 100, pwO: 100, pP: 5}
-        ];
+    <div id="itemsContainer"></div>
 
-        const container = document.getElementById('itemsContainer');
-        drinks.forEach((d) => {
-            container.innerHTML += `
+    <h3 style="text-align:center;">TOTAL: ₹<span id="displayTotal">0</span></h3>
+    <button class="btn-order" onclick="sendOrder()">WhatsApp par Order bhejein 📲</button>
+</div>
+
+<script>
+    const drinks = [
+        {name: "Sprite(250ml)", color: "#4caf50", pW: 490, pWO: 460, pP: 20, qty: 0, price: 0},
+        {name: "Maaza", color: "#ffc107", pW: 520, pWO: 720, pP: 25, qty: 0, price: 0},
+        {name: "Sting", color: "#f44336", pW: 450, pWO: 450, pP: 20, qty: 0, price: 0},
+        {name: "Kinley", color: "#2196f3", pW: 180, pWO: 180, pP: 20, qty: 0, price: 0},
+        {name: "Bisleri", color: "#00bcd4", pW: 380, pWO: 380, pP: 20, qty: 0, price: 0},
+        {name: "Appy Fizz", color: "#795548", pW: 600, pWO: 580, pP: 20, qty: 0, price: 0},
+        {name: "Coca Cola", color: "#d32f2f", pW: 520, pWO: 520, pP: 22, qty: 0, price: 0},
+        {name: "Frooti (₹5)", color: "#ff9800", pW: 100, pWO: 100, pP: 5, qty: 0, price: 0}
+    ];
+
+    const container = document.getElementById('itemsContainer');
+    drinks.forEach((d, i) => {
+        container.innerHTML += `
             <div class="item-card">
                 <div class="item-photo" style="background:${d.color}"></div>
                 <div>
                     <strong>${d.name}</strong>
                     <div>
-                        <button class="btn-opt" style="background:#2e7d32" onclick="selectBtn(this)">Peti With ₹${d.pW}</button>
-                        <button class="btn-opt" style="background:#1976d2" onclick="selectBtn(this)">Peti W/O ₹${d.pwO}</button>
-                        <button class="btn-opt" style="background:#fbc02d; color:black" onclick="selectBtn(this)">Piece ₹${d.pP}</button>
+                        <button class="btn-opt" style="background:#2e7d32" onclick="setPrice(${i}, ${d.pW}, '#2e7d32', this)">Peti W ₹${d.pW}</button>
+                        <button class="btn-opt" style="background:#1976d2" onclick="setPrice(${i}, ${d.pWO}, '#1976d2', this)">Peti W/O ₹${d.pWO}</button>
+                        <button class="btn-opt" style="background:#fbc02d; color:black" onclick="setPrice(${i}, ${d.pP}, '#fbc02d', this)">Piece ₹${d.pP}</button>
                     </div>
-                    <div class="qty-controls">
-                        <button class="btn-qty" onclick="updateQty(this, -1)">-</button>
-                        <span class="qty-val" style="margin: 0 10px;">0</span>
-                        <button class="btn-qty" onclick="updateQty(this, 1)">+</button>
+                    <div class="qty-controls" id="ctrl${i}">
+                        <button class="btn-qty" style="background:#555" onclick="changeQty(${i}, -1)">-</button>
+                        <span id="qty${i}" style="margin: 0 10px;">0</span>
+                        <button class="btn-qty" style="background:#555" onclick="changeQty(${i}, 1)">+</button>
                     </div>
                 </div>
-            </div>`;
-        });
+            </div>
+        `;
+    });
 
-        function selectBtn(btn) {
-            btn.parentElement.querySelectorAll('.btn-opt').forEach(b => b.classList.remove('selected'));
-            btn.classList.add('selected');
-        }
+    function setPrice(i, price, color, btn) {
+        drinks[i].price = price;
+        btn.parentElement.querySelectorAll('button').forEach(b => b.style.border = "none");
+        btn.style.border = "2px solid white";
+        updateTotal();
+    }
 
-        function updateQty(btn, val) {
-            let span = btn.parentElement.querySelector('.qty-val');
-            let count = parseInt(span.innerText) + val;
-            if (count >= 0) span.innerText = count;
-        }
-    </script>
+    function changeQty(i, val) {
+        drinks[i].qty = Math.max(0, drinks[i].qty + val);
+        document.getElementById('qty' + i).innerText = drinks[i].qty;
+        updateTotal();
+    }
+
+    function updateTotal() {
+        let total = drinks.reduce((sum, d) => sum + (d.qty * d.price), 0);
+        document.getElementById('displayTotal').innerText = total;
+    }
+
+    function sendOrder() { alert("Order Total: ₹" + document.getElementById('displayTotal').innerText); }
+</script>
 </body>
 </html>
-
-
