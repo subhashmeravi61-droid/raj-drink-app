@@ -21,10 +21,10 @@
 
 <div class="card">
     <h2 class="header">🥤 Raj Cold Drink Center, Bodla</h2>
-    <input type="text" class="input-field" placeholder="Dukaan ka Naam">
-    <input type="text" class="input-field" placeholder="Tumhara Naam">
-    <input type="text" class="input-field" placeholder="Pata (Address)">
-    <input type="number" class="input-field" placeholder="Mobile Number">
+    <input type="text" id="dukaan" class="input-field" placeholder="Dukaan ka Naam">
+    <input type="text" id="naam" class="input-field" placeholder="Tumhara Naam">
+    <input type="text" id="pata" class="input-field" placeholder="Pata (Address)">
+    <input type="number" id="mobile" class="input-field" placeholder="Mobile Number">
 
     <div id="itemsContainer"></div>
 
@@ -68,14 +68,10 @@
 
     function setPrice(i, price, color, btn) {
         drinks[i].price = price;
-        // Selection highlight
         btn.parentElement.querySelectorAll('button').forEach(b => b.style.border = "none");
         btn.style.border = "2px solid white";
-        
-        // Plus Minus button color change
         const ctrl = document.getElementById('ctrl' + i);
         ctrl.querySelectorAll('.btn-qty').forEach(b => b.style.backgroundColor = color);
-        
         updateTotal();
     }
 
@@ -90,7 +86,12 @@
         document.getElementById('displayTotal').innerText = total;
     }
 
-    function sendOrder() { alert("Order Total: ₹" + document.getElementById('displayTotal').innerText); }
+    function sendOrder() {
+        let msg = `Order from: ${document.getElementById('dukaan').value}\nName: ${document.getElementById('naam').value}\nAddress: ${document.getElementById('pata').value}\nMob: ${document.getElementById('mobile').value}\n\nITEMS:\n`;
+        drinks.forEach(d => { if(d.qty > 0) msg += `${d.name} (₹${d.price}) x ${d.qty}\n`; });
+        msg += `\nTOTAL: ₹${document.getElementById('displayTotal').innerText}`;
+        window.open(`https://wa.me/916264917767?text=${encodeURIComponent(msg)}`, '_blank');
+    }
 </script>
 </body>
 </html>
