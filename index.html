@@ -87,7 +87,15 @@
     }
 
     function sendOrder() {
-        let msg = `Order from: ${document.getElementById('dukaan').value}\nName: ${document.getElementById('naam').value}\nAddress: ${document.getElementById('pata').value}\nMob: ${document.getElementById('mobile').value}\n\nITEMS:\n`;
+        const dukan = document.getElementById('dukaan').value;
+        const mobile = document.getElementById('mobile').value;
+        
+        if (dukaan === "" || mobile === "") {
+            alert("Bhai, pehle Dukaan ka Naam aur Mobile Number bhar do!");
+            return;
+        }
+
+        let msg = `Order from: ${dukaan}\nName: ${document.getElementById('naam').value}\nAddress: ${document.getElementById('pata').value}\nMob: ${mobile}\n\nITEMS:\n`;
         drinks.forEach(d => { if(d.qty > 0) msg += `${d.name} (₹${d.price}) x ${d.qty}\n`; });
         msg += `\nTOTAL: ₹${document.getElementById('displayTotal').innerText}`;
         window.open(`https://wa.me/916264917767?text=${encodeURIComponent(msg)}`, '_blank');
