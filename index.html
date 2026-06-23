@@ -88,18 +88,35 @@
 
     function sendOrder() {
         const dukan = document.getElementById('dukaan').value;
+        const naam = document.getElementById('naam').value;
+        const pata = document.getElementById('pata').value;
         const mobile = document.getElementById('mobile').value;
-        
-        if (dukaan === "" || mobile === "") {
-            alert("Bhai, pehle Dukaan ka Naam aur Mobile Number bhar do!");
+        const total = document.getElementById('displayTotal').innerText;
+
+        if (dukaan === "" || naam === "" || pata === "" || mobile === "") {
+            alert("Bhai, order bhejne ke liye Dukaan ka Naam, Tumhara Naam, Address aur Mobile Number bhar do!");
             return;
         }
 
-        let msg = `Order from: ${dukaan}\nName: ${document.getElementById('naam').value}\nAddress: ${document.getElementById('pata').value}\nMob: ${mobile}\n\nITEMS:\n`;
-        drinks.forEach(d => { if(d.qty > 0) msg += `${d.name} (₹${d.price}) x ${d.qty}\n`; });
-        msg += `\nTOTAL: ₹${document.getElementById('displayTotal').innerText}`;
+        let hasItems = false;
+        let msg = `Order from: ${dukaan}\nName: ${naam}\nAddress: ${pata}\nMob: ${mobile}\n\nITEMS:\n`;
+        
+        drinks.forEach(d => { 
+            if(d.qty > 0) { 
+                msg += `${d.name} (₹${d.price}) x ${d.qty}\n`; 
+                hasItems = true;
+            } 
+        });
+
+        if (!hasItems) {
+            alert("Bhai, pehle koi item to select karo!");
+            return;
+        }
+
+        msg += `\nTOTAL: ₹${total}`;
         window.open(`https://wa.me/916264917767?text=${encodeURIComponent(msg)}`, '_blank');
     }
 </script>
 </body>
 </html>
+
