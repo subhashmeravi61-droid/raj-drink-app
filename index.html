@@ -88,22 +88,22 @@
     }
 
     function sendOrder() {
-        const dukan = document.getElementById('dukaan').value;
-        const naam = document.getElementById('naam').value;
-        const pata = document.getElementById('pata').value;
-        const mobile = document.getElementById('mobile').value;
+        // Yahan maine explicitly .value use kiya hai
+        const dukanVal = document.getElementById('dukaan').value;
+        const naamVal = document.getElementById('naam').value;
+        const pataVal = document.getElementById('pata').value;
+        const mobileVal = document.getElementById('mobile').value;
         
-        if (dukaan === "" || naam === "" || pata === "" || mobile === "") {
+        if (dukanVal === "" || naamVal === "" || pataVal === "" || mobileVal === "") {
             alert("Bhai, sabhi details (Dukaan, Naam, Address, Mobile) bhar do!");
             return;
         }
 
-        let msg = `Order from: ${dukaan}\nName: ${naam}\nAddress: ${pata}\nMob: ${mobile}\n\nITEMS:\n`;
+        let msg = `Order from: ${dukanVal}\nName: ${naamVal}\nAddress: ${pataVal}\nMob: ${mobileVal}\n\nITEMS:\n`;
         let hasItems = false;
         
         drinks.forEach(d => { 
             if(d.qty > 0) { 
-                // Yahan d.type ensure kar raha hai ki Peti/Piece likha aaye
                 msg += `${d.name} (${d.type || 'Piece'} @ ₹${d.price}) x ${d.qty}\n`; 
                 hasItems = true;
             } 
@@ -120,3 +120,4 @@
 </script>
 </body>
 </html>
+
