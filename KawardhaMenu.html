@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <title>Kawardha Cafe | VVIP</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@900&display=swap');
+        body { background: #000; color: #fff; font-family: 'Poppins', sans-serif; padding: 20px; }
+        
+        .logo-box { text-align: center; margin-bottom: 25px; }
+        .crown { font-size: 50px; display: block; filter: drop-shadow(0 0 10px #bf00ff); }
+        .logo-circle { 
+            width: 150px; height: 150px; border: 5px solid #bf00ff; border-radius: 50%; 
+            margin: 0 auto 10px; display: flex; align-items: center; justify-content: center;
+            background: #000; box-shadow: 0 0 30px #bf00ff;
+        }
+        .logo-text { font-family: 'Lobster', cursive; color: #bf00ff; font-size: 28px; text-shadow: 0 0 15px #bf00ff; }
+        .vvip-title { font-size: 35px; color: #bf00ff; text-transform: uppercase; text-shadow: 0 0 15px #bf00ff; margin: 5px 0; }
+
+        .input-box { width: 95%; padding: 18px; margin: 10px 0; border-radius: 15px; border: 1px solid #bf00ff; background: #111; color: #fff; font-size: 16px; }
+        .card { background: #111; padding: 20px; border-radius: 25px; border: 1px solid #bf00ff; margin-bottom: 25px; display: flex; align-items: center; gap: 20px; }
+        .item-img { width: 100px; height: 100px; border-radius: 20px; border: 2px solid #bf00ff; object-fit: cover; }
+        
+        .btn-qty { width: 45px; height: 45px; border-radius: 50%; border: none; color: white; font-weight: bold; cursor: pointer; font-size: 22px; transition: 0.3s; }
+        .blue-btn { background: #007bff; box-shadow: 0 0 15px #007bff; }
+        .red-btn { background: #ff4500; box-shadow: 0 0 15px #ff4500; }
+        
+        .text-blue { color: #007bff; font-weight: bold; }
+        .text-red { color: #ff4500; font-weight: bold; }
+        
+        .btn-send { width: 100%; padding: 22px; background: linear-gradient(45deg, #bf00ff, #5500aa); border: none; border-radius: 20px; font-weight: 900; font-size: 24px; color: white; cursor: pointer; margin-top: 20px; box-shadow: 0 0 20px #bf00ff; }
+    </style>
+</head>
+<body>
+
+    <div class="logo-box">
+        <span class="crown">👑</span>
+        <div class="logo-circle">
+            <div class="logo-text">Kawardha<br>Cafe</div>
+        </div>
+        <h1 class="vvip-title">VVIP MENU</h1>
+    </div>
+
+    <input type="text" class="input-box" id="name" placeholder="अपना नाम लिखें">
+    <input type="text" class="input-box" id="addr" placeholder="अपना पता लिखें">
+    <input type="text" class="input-box" id="mob" placeholder="मोबाइल नंबर">
+
+    <div id="itemsContainer"></div>
+    <h2 id="totalDisplay" style="text-align:center; color:#bf00ff; font-size: 32px;">कुल: ₹0</h2>
+    <button class="btn-send" onclick="sendOrder()">ऑर्डर कन्फर्म करें 🔥</button>
+
+    <script>
+        const menu = [
+            { name: "Cheese Pizza", pS: 150, pL: 250, img: "https://images.unsplash.com/photo-1513104890138-7c749659a591?w=300" },
+            { name: "Veg Burger", pS: 60, pL: 100, img: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=300" },
+            { name: "Cold Coffee", pS: 80, pL: 120, img: "https://images.unsplash.com/photo-1541167760496-1628856ab77a?w=300" },
+            { name: "French Fries", pS: 50, pL: 90, img: "https://images.unsplash.com/photo-1573080496219-bb080dd4f877?w=300" }
+        ];
+
+        const container = document.getElementById('itemsContainer');
+        menu.forEach((item, i) => {
+            item.qtyS = 0; item.qtyL = 0;
+            container.innerHTML += `
+            <div class="card">
+                <img src="${item.img}" class="item-img" onerror="this.src='https://via.placeholder.com/150'">
+                <div style="flex-grow:1;">
+                    <h3 style="margin:0 0 10px 0; color:#bf00ff;">${item.name}</h3>
+                    <div style="display:flex; align-items:center; justify-content:space-between; margin:5px 0;">
+                        <span class="text-blue">छोटा (₹${item.pS})</span>
+                        <div style="display:flex; gap:10px; align-items:center;">
+                            <button class="btn-qty blue-btn" onclick="upd(${i},'S',-1)">-</button>
+                            <span id="s${i}" class="text-blue" style="font-size:20px; font-weight:bold;">0</span>
+                            <button class="btn-qty blue-btn" onclick="upd(${i},'S',1)">+</button>
+                        </div>
+                    </div>
+                    <div style="display:flex; align-items:center; justify-content:space-between; margin:5px 0;">
+                        <span class="text-red">बड़ा (₹${item.pL})</span>
+                        <div style="display:flex; gap:10px; align-items:center;">
+                            <button class="btn-qty red-btn" onclick="upd(${i},'L',-1)">-</button>
+                            <span id="l${i}" class="text-red" style="font-size:20px; font-weight:bold;">0</span>
+                            <button class="btn-qty red-btn" onclick="upd(${i},'L',1)">+</button>
+                        </div>
+                    </div>
+                </div>
+            </div>`;
+        });
+
+        function upd(i, s, v) {
+            if(s=='S') { menu[i].qtyS = Math.max(0, menu[i].qtyS + v); document.getElementById('s'+i).innerText = menu[i].qtyS; }
+            else { menu[i].qtyL = Math.max(0, menu[i].qtyL + v); document.getElementById('l'+i).innerText = menu[i].qtyL; }
+            calc();
+        }
+
+        function calc() {
+            let t = 0;
+            menu.forEach(item => t += (item.qtyS * item.pS) + (item.qtyL * item.pL));
+            document.getElementById('totalDisplay').innerText = "कुल: ₹" + t;
+        }
+
+        function sendOrder() {
+            let n = document.getElementById('name').value, 
+                a = document.getElementById('addr').value, 
+                m = document.getElementById('mob').value;
+            
+            if(!n || !a || !m) { alert("कृपया विवरण भरें!"); return; }
+            
+            let msg = `*KAWARDHA CAFE VVIP ORDER*\nनाम: ${n}\nपता: ${a}\nमोबाइल: ${m}\n\n`;
+            menu.forEach(item => {
+                if(item.qtyS > 0) msg += `• ${item.name} (छोटा): ${item.qtyS}\n`;
+                if(item.qtyL > 0) msg += `• ${item.name} (बड़ा): ${item.qtyL}\n`;
+            });
+            msg += "\n" + document.getElementById('totalDisplay').innerText;
+            
+            // Ye fix hai: https://wa.me/ wala link
+window.open("https://wa.me/916264917767?text=" + encodeURIComponent(msg), '_blank');
+
+        }
+    </script>
+</body>
+</html>
